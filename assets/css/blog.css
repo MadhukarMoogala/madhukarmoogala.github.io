@@ -1,0 +1,290 @@
+/* === Color Variables === */
+:root {
+  /* Light Mode */
+  --text: #2a211c;
+  --background: #f9f5f0;
+  --accent: #8b5a2b;
+  --accent-hover: #c04000;
+  --border: rgba(0, 0, 0, 0.1);
+  
+  /* Dark Mode */
+  --text-dark: #e0d6c2;
+  --background-dark: #1a1a1a;
+  --accent-dark: #d4a259;
+  --border-dark: rgba(255, 255, 255, 0.1);
+}
+
+/* === Base Styles === */
+body {
+  font-family: 'Merriweather', serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.8;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  --text: var(--text-dark);
+  --background: var(--background-dark);
+  --accent: var(--accent-dark);
+  --border: var(--border-dark);
+}
+
+/* === Header === */
+header {
+  border-bottom: 1px solid var(--border) !important;
+  background-color: var(--background);
+}
+
+.site-title {
+  color: var(--text) !important;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-decoration: none !important;
+  transition: color 0.3s;
+}
+
+.site-title:hover {
+  color: var(--accent) !important;
+}
+
+/* === Date Text === */
+.post-date {
+  color: var(--text);
+  opacity: 0.8;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+/* === Dark Mode Toggle === */
+.dark-mode-toggle {
+  background: var(--background);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dark-mode-toggle:hover {
+  background: var(--accent);
+  color: var(--background);
+}
+
+/* === Footer === */
+.footer-text {
+  color: var(--text);
+  opacity: 0.7;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+/* === Content Styles (keep your existing blog content styles here) */
+
+/* === Header === */
+header {
+  border-bottom: 1px solid var(--divider) !important;
+  background-color: var(--paper);
+}
+
+header a {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink) !important;
+  transition: all 0.3s;
+}
+
+header a:hover {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+}
+
+/* === Typography === */
+.blog-post h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.blog-post h1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.blog-post h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin: 3rem 0 1.5rem;
+  color: var(--accent);
+  position: relative;
+}
+
+.blog-post h3::before {
+  content: ">";
+  color: var(--accent);
+  margin-right: 0.8rem;
+  font-family: 'Courier New', monospace;
+}
+
+.text-muted {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* === Blockquotes & Dividers === */
+blockquote {
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  padding-left: 1.5rem;
+  margin: 2.5rem 0;
+  color: var(--ink);
+  position: relative;
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+}
+
+blockquote::before {
+  content: "“";
+  font-size: 4rem;
+  color: var(--divider);
+  position: absolute;
+  left: -1rem;
+  top: -1.5rem;
+  line-height: 1;
+  font-family: 'Playfair Display', serif;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  margin: 3rem 0;
+  opacity: 0.6;
+}
+
+/* === Links === */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  position: relative;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* === Lists === */
+.blog-post ul {
+  padding-left: 1.8rem;
+  list-style-type: none;
+}
+
+.blog-post ul li {
+  margin-bottom: 0.8rem;
+  position: relative;
+}
+
+.blog-post ul li::before {
+  content: "■";
+  color: var(--accent);
+  position: absolute;
+  left: -1.5rem;
+  font-size: 0.7rem;
+  top: 0.4rem;
+}
+
+/* === Images === */
+.blog-post img {
+  border: 12px solid var(--paper);
+  box-shadow: 
+    0 0 0 1px var(--accent),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  filter: sepia(20%) contrast(1.05);
+  margin: 2rem auto;
+  max-width: 100%;
+  display: block;
+}
+
+/* === Footer === */
+footer {
+  border-top: 1px solid var(--divider) !important;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  padding: 2rem 0 !important;
+}
+
+/* === Retro Cassette Tape Divider (Optional) === */
+.cassette-divider {
+  text-align: center;
+  margin: 3rem 0;
+  color: var(--accent);
+  font-size: 1.5rem;
+  letter-spacing: 5px;
+}
+/* Dark Mode Toggle Button */
+
+.dark-mode-toggle {
+  background: transparent !important;
+  border: 1px solid var(--accent) !important;
+  color: var(--accent) !important;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.dark-mode-toggle:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
+}
+
+.dark-mode-toggle i {
+  font-size: 1rem;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  .blog-post h1 {
+    font-size: 2.2rem;
+  }
+  
+  .blog-post h3 {
+    font-size: 1.5rem;
+  }
+  
+  body::after {
+    background-size: 100% 3px;
+  }
+}
+
