@@ -273,6 +273,78 @@ footer {
   font-size: 1rem;
 }
 
+/* === Static Page Content === */
+.content {
+  font-family: 'Merriweather', serif;
+  color: var(--text);
+  line-height: 1.8;
+  max-width: 65ch;
+  margin: 0 auto;
+}
+
+.content p {
+  margin-bottom: 1.5rem;
+}
+
+.content a {
+  color: var(--accent);
+  text-decoration: none;
+  position: relative;
+}
+
+.content a:hover {
+  color: var(--accent-hover);
+}
+
+.content ul.contact-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 2rem 0;
+}
+
+.content ul.contact-list li {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+  position: relative;
+}
+
+.content ul.contact-list i {
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+}
+
+.content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin: 3rem 0 1.5rem;
+  color: var(--accent);
+  position: relative;
+}
+
+.content form {
+  margin: 2rem 0;
+}
+
+.content textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--text);
+  font-family: 'Merriweather', serif;
+  margin-bottom: 1rem;
+}
+
+.content button {
+  background: var(--accent);
+  color: var(--background);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Playfair Display', serif;
+  cursor: pointer;
+  transition
+
 /* === Responsive Design === */
 @media (max-width: 768px) {
   .blog-post h1 {
@@ -287,4 +359,3 @@ footer {
     background-size: 100% 3px;
   }
 }
-
