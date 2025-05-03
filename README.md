@@ -6,15 +6,15 @@ Welcome to my personal blog — a space where thoughts find form, code meets ref
 
 ## 📁 Project Structure
 
-        📁 .vscode/ — ⚙️ Editor settings (optional)  
-        📄 README.md — 📘 Project documentation  
-        📁 articles/ — 📰 Processed HTML articles  
-        📁 assets/ — 🎨 Static assets (CSS, fonts, images)  
-        📄 build.js — 🛠️ Build script to generate static html from marked files
-        📁 content/ — ✍️ Markdown blog posts with resp folder 
-        📄 index.html — 🏠 Homepage entry point  
-        📄 package.json — 📦 Project metadata and dependencies  
-        📄 package-lock.json — 🔐 Dependency lockfile
+        📁 .vscode/ — ⚙️ Editor settings (optional)</br>
+        📄 README.md — 📘 Project documentation</br>
+        📁 articles/ — 📰 Processed HTML articles</br>
+        📁 assets/ — 🎨 Static assets (CSS, fonts, images)</br>
+        📄 build.js — 🛠️ Build script to generate static html from marked files</br>
+        📁 content/ — ✍️ Markdown blog posts with resp folder</br>
+        📄 index.html — 🏠 Homepage entry point</br>
+        📄 package.json — 📦 Project metadata and dependencies</br>
+        📄 package-lock.json — 🔐 Dependency lockfile</br>
 
 ---
 
