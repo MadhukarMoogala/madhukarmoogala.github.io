@@ -60,24 +60,75 @@ node build.js
 If you want to preview the blog locally, you can use any static server:
 
 ```bash
-npx serve publ
+npx serve
 ```
 
 ---
 
-## ✍️ Writing Posts
+### 📂 Content Structure
+```text
+content/
+├── articles/    # Long-form essays
+├── thoughts/    # Short reflections
+└── poetry/      # Formatted verse
+```
 
-Add your blog posts as Markdown files inside the `content/` directory. The `build.js` script will parse these and generate the corresponding HTML pages.
-
-Each post can optionally include frontmatter for metadata like this:
+### ✨ Frontmatter Template
 
 ```markdown
 ---
-title: "Why I Write"
-date: "2025-05-01"
-tags: [reflection, writing]
-abstract: "A personal note on why I chose to start this blog."
+title: "Your Post Title"     # Required
+date: "YYYY-MM-DD"          # Required
+abstract: "Brief preview"   # Appears in listings
+type: "poetry"              # Optional: "article"|"thought"|"poetry"
+tags: [tag1, tag2]          # Optional categorization
+draft: false                # Hide when true
 ---
+```
+
+### 🛠️ Usage
+
+1. **New Post**  
+
+   ```bash
+   touch content/articles/new-post.md
+   ```
+
+1. **Rebuild**  
+
+   ```bash
+   node build.js
+   ```
+
+### 🌈 Special Features
+
+| Feature          | How To Activate         |
+|------------------|-------------------------|
+| Poetry Layout    | `type: poetry`          |
+| Draft Mode       | `draft: true`           |
+
+### 📝 Example Post
+
+```markdown
+---
+title: "Why Static Sites"
+date: "2025-05-20"
+abstract: "The elegance of pure HTML"
+---
+```
+
+## The Beauty of Static
+
+No databases, no JavaScript frameworks - just:
+
+1. Fast loading
+2. Permanent content
+3. Total control
+
+```python
+# Even code works
+def hello_world():
+    print("Like this!")
 ```
 
 ---
