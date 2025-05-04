@@ -28,8 +28,7 @@ Deployment:    What You See Is What You Get
 ## 🖼️ Blog Preview
 
 ![Ink Over Silence Homepage](./HomePage.jpeg)
-
-### Current homepage design - last updated ${new Date().toLocaleDateString()}
+*Current homepage design - last updated 2025-05-04*
 
 ---
 
