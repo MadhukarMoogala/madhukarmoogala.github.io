@@ -1,12 +1,31 @@
 # 📝 Ink Over Silence
 
-Welcome to my personal blog — a space where thoughts find form, code meets reflection, and stories breathe. This is a lightweight, custom-built static blog powered by Node.js.
+Welcome to my digital notebook — where thoughts crystallize into words, code intersects with contemplation, and ideas find their rhythm.
+
+## 🧠 Philosophy
+
+A deliberately minimalist space:  
+**No trackers** · **No bloat** · **Just authentic expression**  
+
+Built for:  
+✦ Reflection over analytics  
+✦ Substance over spectacle  
+✦ Honest sharing over optimization  
+
+## ⚙️ Technical Essence
+
+A custom-built static generator that embodies its philosophy:
+
+```text
+Final Output:  Pure HTML/CSS
+Build Tool:    Node.js (build-time only)
+Deployment:    What You See Is What You Get
+```
 
 ---
 
 ## 📁 Project Structure
 
-        📁 .vscode/ — ⚙️ Editor settings (optional)</br>
         📄 README.md — 📘 Project documentation</br>
         📁 articles/ — 📰 Processed HTML articles</br>
         📁 assets/ — 🎨 Static assets (CSS, fonts, images)</br>
@@ -23,8 +42,9 @@ Welcome to my personal blog — a space where thoughts find form, code meets ref
 ### 1. Clone & Install dependencies
 
 ```bash
-git clone 
-npm install
+git clone https://github.com/MadhukarMoogala/madhukarmoogala.github.io.git
+cd  madhukarmoogala.github.io # change this to yourname.github.io
+npm install --registry https://registry.npmjs.org # hard wire registry to avoid private npm repos.
 ```
 
 ### 2. Build the site
@@ -87,12 +107,6 @@ This project can be extended using:
 - [`gray-matter`](https://www.npmjs.com/package/gray-matter) — For parsing frontmatter
 
 These are examples — your actual dependencies may differ depending on your implementation.
-
----
-
-## 🧠 Philosophy
-
-This blog is intentionally minimalist — no trackers, no bloat, just words and ideas. It’s built to reflect, to share, and to stay honest.
 
 ---
 
