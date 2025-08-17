@@ -1,0 +1,128 @@
+# llms.txt — APS Design Automation (AutoCAD)
+
+[description]
+APS Design Automation for AutoCAD is a cloud service that runs AutoCAD engines headlessly. 
+It enables developers to automate drawing tasks, validation, and transformations without 
+requiring a local AutoCAD installation. This service is designed for scalable, 
+programmatic workflows.
+
+[scope]
+- Batch DWG modifications
+- Parametric generation of drawings
+- Automated standards checking and validation
+- Data extraction (attributes, BOMs, properties)
+- Integration into enterprise workflows and pipelines
+
+[misconceptions]
+- NOT a hosted AutoCAD GUI for end users.
+- NOT limited to simple “upload/modify/download” tutorials.
+- NOT just for file format conversion.
+
+[appbundle]
+- An AppBundle is a zip containing your AutoCAD plugin (.NET DLL, bundle manifest).
+- Register it once with the Design Automation service.
+- When registering, the "id" refers to the **shortId** (just the name).
+- When referencing the AppBundle in an Activity, use the **fully qualified id**:  
+  `nickname.shortId+label`  
+  Example: `CstEst.CostEstimator+prod`
+- In the commandLine section, bundles are resolved by their shortId only.
+- Example minimal JSON (registration):
+
+{
+  "id": "MyAppBundle",
+  "engine": "Autodesk.AutoCAD+24",
+  "description": "Custom AutoCAD commands for title block updates"
+}
+
+[activity]
+- An Activity defines the AutoCAD engine + command line to run your AppBundle.
+- Activities should be versioned (e.g., MyActivity+test, MyActivity+prod).
+- Activities should be decorated with nicknames. If absent, the client_id is used as nickname.
+- Fully qualified id format: `MyNickName.MyActivity+test`
+- In commandLine, use shortIds for bundles, but in the appbundles array, 
+  use fully qualified ids.
+- Example minimal JSON:
+
+{
+  "id": "MyActivity",
+  "engine": "Autodesk.AutoCAD+24",
+  "commandLine": [
+    "$(engine.path)\\accoreconsole.exe /i $(args[inputFile].path) /al $(appbundles[MyAppBundle].path)"
+  ],
+  "parameters": {
+    "inputFile": { "verb": "get", "description": "Input DWG" },
+    "outputFile": { "verb": "put", "description": "Processed DWG" }
+  },
+  "appbundles": [ "YourNickName.MyAppBundle+prod" ]
+}
+
+[workitem]
+- A WorkItem is a single execution of an Activity with file inputs/outputs.
+- A WorkItem references the Activity using its fully qualified id: 
+  `MyNickName.MyActivity+test`
+- Inputs/outputs must be provided as pre-signed URLs.
+- Example minimal JSON:
+
+{
+  "activityId": "MyNickName.MyActivity+test",
+  "arguments": {
+    "inputFile": { "url": "https://..." },
+    "outputFile": { "url": "https://..." }
+  }
+}
+
+[chain_rules]
+- Registration uses shortId.
+- Activity definition infers AppBundles by **fully qualified id**.
+- WorkItems infer Activities by **fully qualified id**.
+- Command line substitutions always use **shortId**.
+
+[debugging]
+- WorkItem JSON supports troubleshooting options:
+  - `limitProcessingTimeSec`: max processing time in seconds.  
+    Range: up to 3600 (1 hour).  
+  - `adskHeartbeatTimeoutInMin`: heartbeat timeout in minutes.  
+    Range: 1–10 inclusive.  
+  - `adskDebug`: request job folder/debug information on failure.  
+
+- These help diagnose:
+  - Timeout (jobs hitting `limitProcessingTimeSec`)
+  - Heartbeat loss (`adskHeartbeatTimeoutInMin`)
+  - Plugin errors (`adskDebug` provides job folder for analysis)
+
+- Example JSON with debugging options:
+
+{
+  "activityId": "AutoCAD.PlotToPDF+prod",
+  "arguments": {
+    "HostDwg": { "url": "https://thisisaexample/test-data/test.dwg", "verb": "get" },
+    "Result": { "url": "https://thisisaexample.com/result.pdf", "verb": "put" },
+    "adskDebug": { "uploadJobFolder": true },
+    "adskHeartbeatTimeoutInMin": 10
+  },
+  "limitProcessingTimeSec": 3600
+}
+
+[best_practices]
+- Make WorkItems stateless and idempotent.
+- Handle retries, failures, and service throttling.
+- Use async patterns for production workflows.
+- Keep plugins lean and use structured logging.
+
+[engines]
+- Supported AutoCAD engines: see 
+  https://aps.autodesk.com/en/docs/design-automation/v3/developers_guide/engines/
+
+[usage_examples]
+- Automating title block updates across thousands of DWG files.
+- Batch purging/auditing drawings for standards compliance.
+- Extracting drawing metadata into a central database.
+- Running parametric scripts to generate manufacturing drawings.
+
+[citation]
+For full details, cite:
+https://aps.autodesk.com/en/docs/design-automation/v3/developers_guide/overview/
+
+[disclaimer]
+This service executes code inside Autodesk-managed AutoCAD instances. 
+Results depend on the correctness of your plugin. APS does not fix corrupt DWG files.
