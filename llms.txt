@@ -44,16 +44,35 @@ programmatic workflows.
 - Example minimal JSON:
 
 {
-  "id": "MyActivity",
-  "engine": "Autodesk.AutoCAD+24",
-  "commandLine": [
-    "$(engine.path)\\accoreconsole.exe /i $(args[inputFile].path) /al $(appbundles[MyAppBundle].path)"
-  ],
-  "parameters": {
-    "inputFile": { "verb": "get", "description": "Input DWG" },
-    "outputFile": { "verb": "put", "description": "Processed DWG" }
-  },
-  "appbundles": [ "YourNickName.MyAppBundle+prod" ]
+    "id": "ListLayersActivity",
+    "commandLine": [
+        "$(engine.path)\\accoreconsole.exe /i \"$(args[InputDwg].path)\" /al \"$(appbundles[ListLayers].path)\" /s \"$(settings[script].path)\""
+    ],
+    "parameters": {
+        "InputDwg": {
+        "zip": false,
+        "ondemand": false,
+        "verb": "get",
+        "description": "Input drawing file",
+        "localName": "Input.dwg"
+        },
+        "result": {
+        "zip": false,
+        "ondemand": false,
+        "verb": "put",
+        "description": "Results",
+        "required": true,
+        "localName": "layers.txt"
+        }
+    },
+    "engine": "Autodesk.AutoCAD+25_1",
+    "appbundles": [
+        "YouNickName.ListLayers+my_working_version"
+    ],
+    "settings": {
+        "script": "(command \"LISTLAYERS\")\n"
+    },
+    "description": "Extracts layer names from an input drawing file and saves them to a text file"
 }
 
 [workitem]
@@ -64,11 +83,19 @@ programmatic workflows.
 - Example minimal JSON:
 
 {
-  "activityId": "MyNickName.MyActivity+test",
-  "arguments": {
-    "inputFile": { "url": "https://..." },
-    "outputFile": { "url": "https://..." }
-  }
+    "activityId": "YourNickName.ListLayersActivity+my_current_version",
+    "arguments": {
+            "InputDwg": {
+                    "url": "https://your-signedossurl-with-read-write-permision/"
+                    "verb": "get"                         
+            },
+            "result": {
+                    "url": "https://your-signedossurl-with-read-write-permision/",
+                    "verb": "put"              
+            },
+            "adskHeartbeatTimeoutInMin": 6
+    },
+    "limitProcessingTimeSec": 3600
 }
 
 [chain_rules]
