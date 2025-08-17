@@ -70,7 +70,9 @@ programmatic workflows.
         "YouNickName.ListLayers+my_working_version"
     ],
     "settings": {
-        "script": "(command \"LISTLAYERS\")\n"
+        	"script": {
+			    "value": "LISTLAYERS\n"
+		    }
     },
     "description": "Extracts layer names from an input drawing file and saves them to a text file"
 }
