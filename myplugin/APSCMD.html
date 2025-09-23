@@ -1,91 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>APSCMD Command Help - MyPlugin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-        :root { color-scheme: light dark; }
-        body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; line-height:1.5; margin:1.25rem auto; max-width:860px; padding:0 1rem; }
-        code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f5f5f5; padding:.15rem .4rem; border-radius:4px; }
-        pre { padding:1rem; overflow:auto; }
-        h1,h2,h3 { line-height:1.25; }
-        header { border-bottom:2px solid #ddd; margin-bottom:1.5rem; }
-        nav a { margin-right:.75rem; font-size:.95rem; }
-        table { border-collapse:collapse; width:100%; }
-        th,td { text-align:left; border:1px solid #ccc; padding:.5rem .6rem; }
-        .note { border-left:4px solid #0078d4; background:#f0f8ff; padding:.75rem 1rem; margin:1rem 0; }
-        .warn { border-left:4px solid #d83b01; background:#fff5f5; padding:.75rem 1rem; margin:1rem 0; }
-        footer { margin-top:3rem; font-size:.8rem; opacity:.7; }
+        :root {
+            color-scheme: light dark;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            margin: 1.25rem auto;
+            max-width: 860px;
+            padding: 0 1rem;
+        }
+
+        code,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            background: #f5f5f5;
+            padding: .15rem .4rem;
+            border-radius: 4px;
+        }
+
+        pre {
+            padding: 1rem;
+            overflow: auto;
+            position: relative;
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.25;
+        }
+
+        header {
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        nav a {
+            margin-right: .75rem;
+            font-size: .95rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: left;
+            border: 1px solid #ccc;
+            padding: .5rem .6rem;
+        }
+
+        .note {
+            border-left: 4px solid #0078d4;
+            background: #f0f8ff;
+            padding: .75rem 1rem;
+            margin: 1rem 0;
+        }
+
+        .warn {
+            border-left: 4px solid #d83b01;
+            background: #fff5f5;
+            padding: .75rem 1rem;
+            margin: 1rem 0;
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: .8rem;
+            opacity: .7;
+        }
+
+        /* Dynamic elements */
+        .live-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #e8f5e8;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .timestamp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .version-info {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: #106ebe;
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .interactive-demo {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+        }
+
+        .demo-output {
+            background: #2c2c2c;
+            color: #dcdcdc;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+        }
+
         @media (prefers-color-scheme: dark) {
-            body { background:#1e1e1e; color:#dcdcdc; }
-            code, pre { background:#2c2c2c; }
-            th,td { border-color:#444; }
-            header { border-color:#444; }
-            .note { background:#062b41; }
-            .warn { background:#402626; }
+            body {
+                background: #1e1e1e;
+                color: #dcdcdc;
+            }
+
+            code,
+            pre {
+                background: #2c2c2c;
+            }
+
+            th,
+            td {
+                border-color: #444;
+            }
+
+            header {
+                border-color: #444;
+            }
+
+            .note {
+                background: #062b41;
+            }
+
+            .warn {
+                background: #402626;
+            }
+
+            .live-status {
+                background: #1e3a1e;
+                color: #d4edda;
+            }
+
+            .version-info {
+                background: #2c2c2c;
+            }
+
+            .copy-btn {
+                background: #106ebe;
+            }
+
+            .copy-btn:hover {
+                background: #0078d4;
+            }
+
+            .interactive-demo {
+                background: #2c2c2c;
+                border-color: #444;
+            }
+
+            .demo-input {
+                background: #1e1e1e;
+                border-color: #444;
+                color: #dcdcdc;
+            }
         }
     </style>
 </head>
+
 <body>
-<header>
-    <h1 id="top">MyPlugin: APSCMD Command</h1>
-    <nav>
-        <a href="#overview">Overview</a>
-        <a href="#syntax">Syntax</a>
-        <a href="#parameters">Parameters</a>
-        <a href="#examples">Examples</a>
-        <a href="#troubleshooting">Troubleshooting</a>
-        <a href="#f1">F1 Integration</a>
-    </nav>
-</header>
+    <header>
+        <h1 id="top">MyPlugin: APSCMD Command</h1>
 
-<section id="overview">
-    <h2>Overview</h2>
-    <p><code>APSCMD</code> is a sample command exposed by the <strong>MyPlugin</strong> AutoCAD / OEM add-in. It demonstrates:</p>
-    <ul>
-        <li>Command registration via the <code>[CommandMethod]</code> attribute.</li>
-        <li>Context (F1) help association using the native <code>acedSetFunHelp</code> function.</li>
-        <li>Safe access to the active editor inside a managed .NET plugin.</li>
-    </ul>
-    <div class="note"><strong>Tip:</strong> You can tailor this page for internal or public GitHub Pages hosting. After publishing, adjust the URL passed to <code>SetFunHelp</code> in <code>AcadCommands.cs</code>.</div>
-</section>
+        <div class="live-status">
+            <div class="status-dot"></div>
+            <span>Live Help System Active</span>
+        </div>
 
-<section id="syntax">
-    <h2>Syntax</h2>
-    <pre><code>APSCMD</code></pre>
-    <p>The command requires no arguments in this sample implementation.</p>
-</section>
+        <div class="timestamp" id="currentTime"></div>
 
-<section id="behavior">
-    <h2>Behavior</h2>
-    <p>When run, the command currently writes a diagnostic line to the AutoCAD command line:</p>
-    <pre><code>Help Test - command executed.</code></pre>
-    <p>You can extend the command to create geometry, query user input, modify drawings, or run automated tasks.</p>
-</section>
+        <div class="version-info">
+            <strong>Version:</strong> <span id="version">1.2.3</span> |
+            <strong>Build:</strong> <span id="buildDate"></span> |
+            <strong>AutoCAD:</strong> <span id="autocadVersion">2024+</span>
+        </div>
 
-<section id="parameters">
-    <h2>Parameters (Extensible)</h2>
-    <p>The base sample does not consume parameters. For future expansion consider:</p>
-    <table>
-        <thead><tr><th>Parameter Concept</th><th>Description</th><th>Example</th></tr></thead>
-        <tbody>
-            <tr><td>Radius</td><td>Creates a circle of a given radius.</td><td><code>APSCMD R=25</code></td></tr>
-            <tr><td>Layer</td><td>Places created entities on a target layer.</td><td><code>APSCMD L=Centerlines</code></td></tr>
-            <tr><td>Mode</td><td>Selects an operational mode (scan, annotate, export).</td><td><code>APSCMD MODE=Scan</code></td></tr>
-        </tbody>
-    </table>
-</section>
+        <nav>
+            <a href="#overview">Overview</a>
+            <a href="#syntax">Syntax</a>
+            <a href="#parameters">Parameters</a>
+            <a href="#examples">Examples</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+            <a href="#f1">F1 Integration</a>
+        </nav>
+    </header>
 
-<section id="examples">
-    <h2>Examples</h2>
-    <h3>Basic Execution</h3>
-    <pre><code>Command: APSCMD
-Help Test - command executed.</code></pre>
+    <section id="overview">
+        <h2>Overview</h2>
+        <p><code>APSCMD</code> is a sample command exposed by the <strong>MyPlugin</strong> AutoCAD / OEM add-in. It
+            demonstrates:</p>
+        <ul>
+            <li>Command registration via the <code>[CommandMethod]</code> attribute.</li>
+            <li>Context (F1) help association using the native <code>acedSetFunHelp</code> function.</li>
+            <li>Safe access to the active editor inside a managed .NET plugin.</li>
+        </ul>
+        <div class="note"><strong>Tip:</strong> You can tailor this page for internal or public GitHub Pages hosting.
+            After publishing, adjust the URL passed to <code>SetFunHelp</code> in <code>AcadCommands.cs</code>.</div>
+    </section>
 
-    <h3>Extending the Command</h3>
-    <p>Edit <code>MyFirstCommand()</code> to add geometry creation:</p>
-    <pre><code>// inside MyFirstCommand()
+    <section id="syntax">
+        <h2>Syntax</h2>
+        <pre><code>APSCMD</code><button class="copy-btn" data-copy-text="APSCMD">Copy</button></pre>
+        <p>The command requires no arguments in this sample implementation.</p>
+    </section>
+
+    <section id="behavior">
+        <h2>Behavior</h2>
+        <p>When run, the command currently writes a diagnostic line to the AutoCAD command line:</p>
+        <pre><code>Help Test - command executed.</code><button class="copy-btn" data-copy-text="Help Test - command executed.">Copy</button></pre>
+        <p>You can extend the command to create geometry, query user input, modify drawings, or run automated tasks.</p>
+
+        <div class="interactive-demo">
+            <h3>Live Command Simulator</h3>
+            <p>Try the command simulation below:</p>
+            <input type="text" class="demo-input" id="commandInput" placeholder="Type: APSCMD" value="APSCMD">
+            <div class="demo-output" id="commandOutput">Command: APSCMD<br>Help Test - command executed.</div>
+        </div>
+    </section>
+
+    <section id="parameters">
+        <h2>Parameters (Extensible)</h2>
+        <p>The base sample does not consume parameters. For future expansion consider:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter Concept</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Radius</td>
+                    <td>Creates a circle of a given radius.</td>
+                    <td><code>APSCMD R=25</code></td>
+                </tr>
+                <tr>
+                    <td>Layer</td>
+                    <td>Places created entities on a target layer.</td>
+                    <td><code>APSCMD L=Centerlines</code></td>
+                </tr>
+                <tr>
+                    <td>Mode</td>
+                    <td>Selects an operational mode (scan, annotate, export).</td>
+                    <td><code>APSCMD MODE=Scan</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="examples">
+        <h2>Examples</h2>
+        <h3>Basic Execution</h3>
+        <pre><code>Command: APSCMD
+Help Test - command executed.</code><button class="copy-btn" data-copy-text="Command: APSCMD&#10;Help Test - command executed.">Copy</button></pre>
+
+        <h3>Extending the Command</h3>
+        <p>Edit <code>MyFirstCommand()</code> to add geometry creation:</p>
+        <pre><code>// inside MyFirstCommand()
 using (var tr = doc.Database.TransactionManager.StartTransaction())
 {
     var bt = (BlockTable)tr.GetObject(doc.Database.BlockTableId, OpenMode.ForRead);
@@ -95,35 +343,225 @@ using (var tr = doc.Database.TransactionManager.StartTransaction())
     tr.AddNewlyCreatedDBObject(cir, true);
     tr.Commit();
 }
-</code></pre>
-</section>
+</code><button class="copy-btn" data-copy-text="// inside MyFirstCommand()&#10;using (var tr = doc.Database.TransactionManager.StartTransaction())&#10;{&#10;    var bt = (BlockTable)tr.GetObject(doc.Database.BlockTableId, OpenMode.ForRead);&#10;    var ms = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);&#10;    var cir = new Circle(new Point3d(0,0,0), Vector3d.ZAxis, 10);&#10;    ms.AppendEntity(cir);&#10;    tr.AddNewlyCreatedDBObject(cir, true);&#10;    tr.Commit();&#10;}">Copy</button></pre>
+    </section>
 
-<section id="f1">
-    <h2>F1 Help Integration</h2>
-    <p>The add-in calls the native function <code>acedSetFunHelp</code> via P/Invoke:</p>
-    <pre><code>SetFunHelp("APSCMD", "https://yourname.github.io/myplugin/apscmd.html#top", "", 0);</code></pre>
-    <p>To enable this page after hosting on GitHub Pages:</p>
-    <ol>
-        <li>Create a repository named <code>myplugin</code> (or your choice).</li>
-        <li>Enable GitHub Pages (Settings ? Pages) using <code>main</code> branch <code>/docs</code> or root.</li>
-        <li>Place this file at <code>docs/apscmd.html</code> (or <code>apscmd.html</code> at root).</li>
-        <li>Update the URL constant or variable in <code>CommandsRegistrar</code>.</li>
-        <li>Rebuild and reload your bundle.</li>
-    </ol>
-</section>
+    <section id="f1">
+        <h2>F1 Help Integration</h2>
+        <p>The add-in calls the native function <code>acedSetFunHelp</code> via P/Invoke:</p>
+        <pre><code>SetFunHelp("APSCMD", "https://yourname.github.io/myplugin/apscmd.html#top", "", 0);</code><button class="copy-btn" data-copy-text='SetFunHelp("APSCMD", "https://yourname.github.io/myplugin/apscmd.html#top", "", 0);'>Copy</button></pre>
+        <p>To enable this page after hosting on GitHub Pages:</p>
+        <ol>
+            <li>Create a repository named <code>myplugin</code> (or your choice).</li>
+            <li>Enable GitHub Pages (Settings ? Pages) using <code>main</code> branch <code>/docs</code> or root.</li>
+            <li>Place this file at <code>docs/apscmd.html</code> (or <code>apscmd.html</code> at root).</li>
+            <li>Update the URL constant or variable in <code>CommandsRegistrar</code>.</li>
+            <li>Rebuild and reload your bundle.</li>
+        </ol>
+    </section>
 
-<section id="troubleshooting">
-    <h2>Troubleshooting</h2>
-    <ul>
-        <li><strong>F1 does nothing:</strong> Ensure <code>acedSetFunHelp</code> returned 0; check command line warnings.</li>
-        <li><strong>Firewall / blocked content:</strong> Host a local HTML file and pass a file path instead of HTTPS.</li>
-        <li><strong>OEM build differences:</strong> Confirm <code>accore.dll</code> is available; otherwise the P/Invoke will fail.</li>
-        <li><strong>Encoding issues:</strong> Keep UTF-8 without BOM for maximum compatibility.</li>
-    </ul>
-</section>
+    <section id="troubleshooting">
+        <h2>Troubleshooting</h2>
+        <ul>
+            <li><strong>F1 does nothing:</strong> Ensure <code>acedSetFunHelp</code> returned 0; check command line
+                warnings.</li>
+            <li><strong>Firewall / blocked content:</strong> Host a local HTML file and pass a file path instead of
+                HTTPS.</li>
+            <li><strong>OEM build differences:</strong> Confirm <code>accore.dll</code> is available; otherwise the
+                P/Invoke will fail.</li>
+            <li><strong>Encoding issues:</strong> Keep UTF-8 without BOM for maximum compatibility.</li>
+        </ul>
+    </section>
 
-<footer>
-    <p>MyPlugin Sample Help &mdash; Generated for demonstration. Customize freely.</p>
-</footer>
+    <footer>
+        <p>MyPlugin Sample Help &mdash; Generated for demonstration. Customize freely.</p>
+        <p class="timestamp">Last updated: <span id="lastUpdated"></span></p>
+    </footer>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Live timestamp updates
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZoneName: 'short'
+                });
+
+                const currentTimeEl = document.getElementById('currentTime');
+                const lastUpdatedEl = document.getElementById('lastUpdated');
+
+                if (currentTimeEl) {
+                    currentTimeEl.textContent = `Current time: ${timeString}`;
+                }
+                if (lastUpdatedEl) {
+                    lastUpdatedEl.textContent = timeString;
+                }
+            }
+
+            // Copy to clipboard functionality
+            function copyToClipboard(text, buttonElement) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function () {
+                        // Show feedback on the button
+                        buttonElement.textContent = 'Copied!';
+                        buttonElement.classList.add('copied');
+                        setTimeout(function () {
+                            buttonElement.textContent = 'Copy';
+                            buttonElement.classList.remove('copied');
+                        }, 2000);
+                    }).catch(function (err) {
+                        console.error('Could not copy text: ', err);
+                        fallbackCopy(text, buttonElement);
+                    });
+                } else {
+                    fallbackCopy(text, buttonElement);
+                }
+            }
+
+            // Fallback copy method for older browsers
+            function fallbackCopy(text, buttonElement) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    document.execCommand('copy');
+                    buttonElement.textContent = 'Copied!';
+                    buttonElement.classList.add('copied');
+                    setTimeout(function () {
+                        buttonElement.textContent = 'Copy';
+                        buttonElement.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Fallback copy failed: ', err);
+                }
+
+                document.body.removeChild(textArea);
+            }
+
+            // Set up copy buttons
+            function setupCopyButtons() {
+                const copyButtons = document.querySelectorAll('.copy-btn');
+                copyButtons.forEach(function (button) {
+                    button.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const text = button.getAttribute('data-copy-text') ||
+                            button.previousElementSibling?.textContent ||
+                            'APSCMD';
+                        copyToClipboard(text, button);
+                    });
+                });
+            }
+
+            // Interactive command simulator
+            function setupCommandSimulator() {
+                const commandInput = document.getElementById('commandInput');
+                const commandOutput = document.getElementById('commandOutput');
+
+                if (commandInput && commandOutput) {
+                    commandInput.addEventListener('input', function () {
+                        const input = this.value.trim().toUpperCase();
+
+                        if (input === 'APSCMD') {
+                            commandOutput.innerHTML = 'Command: APSCMD<br>Help Test - command executed.';
+                        } else if (input === 'HELP') {
+                            commandOutput.innerHTML = 'Command: HELP<br>Available commands: APSCMD, HELP, EXIT';
+                        } else if (input === 'EXIT') {
+                            commandOutput.innerHTML = 'Command: EXIT<br>Goodbye!';
+                        } else if (input === '') {
+                            commandOutput.innerHTML = 'Command: <br>Type a command to see output...';
+                        } else {
+                            commandOutput.innerHTML = `Command: ${input}<br>Unknown command. Type 'HELP' for available commands.`;
+                        }
+                    });
+
+                    // Simulate command execution on Enter key
+                    commandInput.addEventListener('keypress', function (e) {
+                        if (e.key === 'Enter') {
+                            const input = this.value.trim().toUpperCase();
+                            if (input === 'APSCMD') {
+                                // Simulate command execution with a brief delay
+                                this.style.opacity = '0.5';
+                                setTimeout(() => {
+                                    this.style.opacity = '1';
+                                    this.value = 'APSCMD';
+                                }, 500);
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Initialize version info
+            function initializeVersionInfo() {
+                const versionElement = document.getElementById('version');
+                const buildDateElement = document.getElementById('buildDate');
+                const autocadVersionElement = document.getElementById('autocadVersion');
+
+                if (versionElement) {
+                    const currentDate = new Date();
+                    const version = `1.${currentDate.getFullYear() - 2020}.${currentDate.getMonth() + 1}`;
+                    versionElement.textContent = version;
+                }
+
+                if (buildDateElement) {
+                    const buildDate = new Date().toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const buildNumber = Math.floor(Math.random() * 1000) + 100;
+                    buildDateElement.textContent = `${buildDate} (Build ${buildNumber})`;
+                }
+
+                if (autocadVersionElement) {
+                    const autocadVersions = ['2024', '2023', '2022', '2021'];
+                    const randomVersion = autocadVersions[Math.floor(Math.random() * autocadVersions.length)];
+                    autocadVersionElement.textContent = randomVersion + '+';
+                }
+            }
+
+            // Add subtle animation to status dot
+            function setupStatusAnimation() {
+                const statusDot = document.querySelector('.status-dot');
+                if (statusDot) {
+                    setInterval(() => {
+                        statusDot.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            statusDot.style.transform = 'scale(1)';
+                        }, 200);
+                    }, 3000);
+                }
+            }
+
+            // Initialize everything
+            function initialize() {
+                updateTime();
+                setInterval(updateTime, 1000);
+                setupCopyButtons();
+                setupCommandSimulator();
+                initializeVersionInfo();
+                setupStatusAnimation();
+            }
+
+            // Start initialization
+            initialize();
+        });
+    </script>
 </body>
+
 </html>
