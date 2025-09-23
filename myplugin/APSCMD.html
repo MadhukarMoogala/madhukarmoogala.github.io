@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>APSCMD Command Help - MyPlugin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root { color-scheme: light dark; }
+        body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; line-height:1.5; margin:1.25rem auto; max-width:860px; padding:0 1rem; }
+        code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#f5f5f5; padding:.15rem .4rem; border-radius:4px; }
+        pre { padding:1rem; overflow:auto; }
+        h1,h2,h3 { line-height:1.25; }
+        header { border-bottom:2px solid #ddd; margin-bottom:1.5rem; }
+        nav a { margin-right:.75rem; font-size:.95rem; }
+        table { border-collapse:collapse; width:100%; }
+        th,td { text-align:left; border:1px solid #ccc; padding:.5rem .6rem; }
+        .note { border-left:4px solid #0078d4; background:#f0f8ff; padding:.75rem 1rem; margin:1rem 0; }
+        .warn { border-left:4px solid #d83b01; background:#fff5f5; padding:.75rem 1rem; margin:1rem 0; }
+        footer { margin-top:3rem; font-size:.8rem; opacity:.7; }
+        @media (prefers-color-scheme: dark) {
+            body { background:#1e1e1e; color:#dcdcdc; }
+            code, pre { background:#2c2c2c; }
+            th,td { border-color:#444; }
+            header { border-color:#444; }
+            .note { background:#062b41; }
+            .warn { background:#402626; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 id="top">MyPlugin: APSCMD Command</h1>
+    <nav>
+        <a href="#overview">Overview</a>
+        <a href="#syntax">Syntax</a>
+        <a href="#parameters">Parameters</a>
+        <a href="#examples">Examples</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+        <a href="#f1">F1 Integration</a>
+    </nav>
+</header>
+
+<section id="overview">
+    <h2>Overview</h2>
+    <p><code>APSCMD</code> is a sample command exposed by the <strong>MyPlugin</strong> AutoCAD / OEM add-in. It demonstrates:</p>
+    <ul>
+        <li>Command registration via the <code>[CommandMethod]</code> attribute.</li>
+        <li>Context (F1) help association using the native <code>acedSetFunHelp</code> function.</li>
+        <li>Safe access to the active editor inside a managed .NET plugin.</li>
+    </ul>
+    <div class="note"><strong>Tip:</strong> You can tailor this page for internal or public GitHub Pages hosting. After publishing, adjust the URL passed to <code>SetFunHelp</code> in <code>AcadCommands.cs</code>.</div>
+</section>
+
+<section id="syntax">
+    <h2>Syntax</h2>
+    <pre><code>APSCMD</code></pre>
+    <p>The command requires no arguments in this sample implementation.</p>
+</section>
+
+<section id="behavior">
+    <h2>Behavior</h2>
+    <p>When run, the command currently writes a diagnostic line to the AutoCAD command line:</p>
+    <pre><code>Help Test - command executed.</code></pre>
+    <p>You can extend the command to create geometry, query user input, modify drawings, or run automated tasks.</p>
+</section>
+
+<section id="parameters">
+    <h2>Parameters (Extensible)</h2>
+    <p>The base sample does not consume parameters. For future expansion consider:</p>
+    <table>
+        <thead><tr><th>Parameter Concept</th><th>Description</th><th>Example</th></tr></thead>
+        <tbody>
+            <tr><td>Radius</td><td>Creates a circle of a given radius.</td><td><code>APSCMD R=25</code></td></tr>
+            <tr><td>Layer</td><td>Places created entities on a target layer.</td><td><code>APSCMD L=Centerlines</code></td></tr>
+            <tr><td>Mode</td><td>Selects an operational mode (scan, annotate, export).</td><td><code>APSCMD MODE=Scan</code></td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section id="examples">
+    <h2>Examples</h2>
+    <h3>Basic Execution</h3>
+    <pre><code>Command: APSCMD
+Help Test - command executed.</code></pre>
+
+    <h3>Extending the Command</h3>
+    <p>Edit <code>MyFirstCommand()</code> to add geometry creation:</p>
+    <pre><code>// inside MyFirstCommand()
+using (var tr = doc.Database.TransactionManager.StartTransaction())
+{
+    var bt = (BlockTable)tr.GetObject(doc.Database.BlockTableId, OpenMode.ForRead);
+    var ms = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+    var cir = new Circle(new Point3d(0,0,0), Vector3d.ZAxis, 10);
+    ms.AppendEntity(cir);
+    tr.AddNewlyCreatedDBObject(cir, true);
+    tr.Commit();
+}
+</code></pre>
+</section>
+
+<section id="f1">
+    <h2>F1 Help Integration</h2>
+    <p>The add-in calls the native function <code>acedSetFunHelp</code> via P/Invoke:</p>
+    <pre><code>SetFunHelp("APSCMD", "https://yourname.github.io/myplugin/apscmd.html#top", "", 0);</code></pre>
+    <p>To enable this page after hosting on GitHub Pages:</p>
+    <ol>
+        <li>Create a repository named <code>myplugin</code> (or your choice).</li>
+        <li>Enable GitHub Pages (Settings ? Pages) using <code>main</code> branch <code>/docs</code> or root.</li>
+        <li>Place this file at <code>docs/apscmd.html</code> (or <code>apscmd.html</code> at root).</li>
+        <li>Update the URL constant or variable in <code>CommandsRegistrar</code>.</li>
+        <li>Rebuild and reload your bundle.</li>
+    </ol>
+</section>
+
+<section id="troubleshooting">
+    <h2>Troubleshooting</h2>
+    <ul>
+        <li><strong>F1 does nothing:</strong> Ensure <code>acedSetFunHelp</code> returned 0; check command line warnings.</li>
+        <li><strong>Firewall / blocked content:</strong> Host a local HTML file and pass a file path instead of HTTPS.</li>
+        <li><strong>OEM build differences:</strong> Confirm <code>accore.dll</code> is available; otherwise the P/Invoke will fail.</li>
+        <li><strong>Encoding issues:</strong> Keep UTF-8 without BOM for maximum compatibility.</li>
+    </ul>
+</section>
+
+<footer>
+    <p>MyPlugin Sample Help &mdash; Generated for demonstration. Customize freely.</p>
+</footer>
+</body>
+</html>
